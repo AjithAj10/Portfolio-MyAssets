@@ -1,3 +1,3 @@
 # Portfolio-MyAssets
 
-hello  world
+npx nodemon index - to run nodemon

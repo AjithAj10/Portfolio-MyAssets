@@ -1,6 +1,7 @@
 const tesseract = require('tesseract.js');
-async function dataFromImage() {
-    console.log('data');
+
+async function extractTextFromImage() {
+ 
     const text = await tesseract.recognize('./image.png');
 
     const lines = text.data.text.trim().split('\n');
@@ -30,8 +31,9 @@ async function dataFromImage() {
       }
     }
     
-    console.log(results);
+    //store it in the DB
+   return results;
 
   }
   
-  module.exports = {dataFromImage}
+  module.exports = {extractTextFromImage}

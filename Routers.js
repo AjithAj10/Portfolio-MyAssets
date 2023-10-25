@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Binance = require('./Binance');
-const extractTextFromImage = require('./dataFromImage.js');
+const imageParser = require('./dataFromImage.js');
 
 router.get('/binance/assets', async (req, res) => {
     try {
@@ -25,6 +25,10 @@ router.use('/binance/trade', async (req, res) => {
     }
 });
 
+router.use('/imageParser', async (req,res) => {
+    let data = await imageParser.extractTextFromImage();
+    res.send(data)
+})
 
 
 module.exports = router;

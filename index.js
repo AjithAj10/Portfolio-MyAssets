@@ -1,24 +1,9 @@
 const express = require('express');
+const router = require('./Routers'); // Import the router
 const app = express();
-const Binance = require('./Binance');
 
-app.use('/binance/assets', async (req,res) => {
- try {
- const result = await Binance.fetchBinanceAssets();
- //console.log(result);
- let balances = result.balances.filter(balance => balance.locked > 0.1)
-  res.send(balances);
- }
-catch (err) {
-  res.send(err);
-  console.log('error', err);
- }
-})
+app.use('/', router); // Use the router at the root path
 
-
-
-
-
-app.listen('3000',() => {
-    console.log('App running...');
-})
+app.listen(3000, () => {
+    console.log('App running on port 3000');
+});

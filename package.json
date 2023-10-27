@@ -24,6 +24,8 @@
     "nodemon": "^3.0.1"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
+    "mongoose": "^7.6.3",
     "node-fetch": "^3.3.2",
     "tesseract.js": "^5.0.2"
   }

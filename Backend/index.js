@@ -5,10 +5,11 @@ const mongoose = require("mongoose");
 const coinsModel = require('./Models/coins');
 require('dotenv').config();
 app.use(express.json());
+const cors = require('cors');
 
+app.use(cors());
 
 app.use('/', router); // Use the router at the root path
-
 
 const url = process.env.DB_URL;
 

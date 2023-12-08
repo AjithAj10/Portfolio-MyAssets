@@ -19,7 +19,7 @@ const coinSchema = new mongoose.Schema({
     },
     lastDate: {
         type: Date,
-        required: true
+        required: false
     },
     status: {
         type: String,

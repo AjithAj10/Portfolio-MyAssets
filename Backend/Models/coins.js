@@ -21,6 +21,10 @@ const coinSchema = new mongoose.Schema({
         type: Date,
         required: false
     },
+    exchange: {
+        type: String,
+        required: false
+    },
     status: {
         type: String,
         enum: ['active', 'in-progress', 'closed', 'sold'],

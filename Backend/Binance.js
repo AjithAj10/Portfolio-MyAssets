@@ -57,8 +57,8 @@ async function fetchBinanceAssets() {
   return result;
 }
 
-const getLatestTrades = async () => {
-  const symbol = 'BTCUSDT'; // Replace with the symbol you want to fetch trade history for
+const getLatestTrades = async (coin) => {
+  const symbol = coin; // Replace with the symbol you want to fetch trade history for
 
   const createSignature = (queryString) => {
     return crypto.createHmac('sha256', API_SECRET).update(queryString).digest('hex');
@@ -76,24 +76,15 @@ const getLatestTrades = async () => {
   
   const requestUrl = `https://api.binance.com/api/v3/myTrades?${queryString}&signature=${signature}`;
   
-  async function fetchTradeHistory() {
     try {
       const response = await axios.get(requestUrl, { headers });
       const tradeHistory = response.data;
-  
       return tradeHistory;
     } catch (error) {
       console.error('Error fetching trade history:', error);
     }
-  }
   
-  fetchTradeHistory()
-    .then((tradeHistory) => {
-      console.log('Trade History:', tradeHistory);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
 };
+
 
 module.exports = { fetchBinanceAssets, getLatestTrades };

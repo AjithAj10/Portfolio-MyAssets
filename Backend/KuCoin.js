@@ -1,31 +1,18 @@
-const axios = require('axios');
-const crypto = require('crypto');
+const API = require('kucoin-node-sdk');
 
-const apiKey = '654cf8e93872490001ce73f3';
-const apiSecret = '979ab4eb-515e-49c1-a750-997daca86390';
-const apiPassphrase = 'portfolio_node';
+API.init(require('./config'));
 
-const baseUrl = 'https://api.kucoin.com';
-const endpoint = '/api/v1/accounts'; // Replace with your desired endpoint
+const getCoins =  async () => {
+    const res = await API.rest.User.Account.getAccountsList();
+    let coins = res.data.filter(e => e.balance > 0.01);
+    return coins;
+}
+const getTades = async () => {
+    const res = await API.rest.Trade.Fills.getFillsList();
+    let coins = res.data.items.filter(e => e.balance > 0.1);
+    return coins;  
+}
+  //const getTimestampRl = await API.rest.Others.getTimestamp();
 
-const timestamp = Date.now();
-const nonce = crypto.randomBytes(16).toString('hex');
-
-const payload = `${timestamp}${nonce}${endpoint}`;
-const signature = crypto.createHmac('sha256', apiSecret).update(payload).digest('base64');
-
-const headers = {
-  'KC-API-KEY': apiKey,
-  'KC-API-SIGN': signature,
-  'KC-API-TIMESTAMP': timestamp,
-  'KC-API-PASSPHRASE': apiPassphrase,
-  'Content-Type': 'application/json',
-};
-
-axios.post(`${baseUrl}${endpoint}`, {/* Your request data */}, { headers })
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.error(error.response.data);
-  });
+ 
+module.exports = {getCoins, getTades};

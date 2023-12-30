@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 export default function Home() {
   const [binanceBalance, setBinanceBalance] = useState();
+  const [kuBalance, setKuBalance] = useState();
   const [myCoins, setMyCoins] = useState();
   const [editCoin, setEditCoin] = useState();
 
@@ -25,9 +26,19 @@ export default function Home() {
       console.log(e);
     }
   };
+  const callKu = async () => {
+    try {
+      const result = await axios.get("http://localhost:3000/ku/assets");
+      console.log(result.data);
+      setKuBalance(result.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const addCoins = async () => {
     if (binanceBalance && binanceBalance.length > 0) {
+        console.log('adding binance coins');
       const date = new Date();
 
       let array = binanceBalance.map((coin) => ({
@@ -37,6 +48,7 @@ export default function Home() {
         investedAmount: 10, // Please adjust this value according to your logic
         lastDate: date,
         status: "active",
+        exchange: "binance"
       }));
 
       try {
@@ -45,9 +57,37 @@ export default function Home() {
           axios.post(url, array[i]);
         }
         setBinanceBalance();
-      } catch (e) {
+      } catch (e) { 
         console.log(e);
       }
+    }else if(kuBalance && kuBalance.length > 0) {
+        const date = new Date();
+        console.log('adding Ku coins');
+
+        let array = kuBalance.map((coin) => ({
+          name: coin.currency,
+          avgBuyAmount: 10 / coin.balance,
+          quantity: coin.balance,
+          investedAmount: 10, // Please adjust this value according to your logic
+          lastDate: date,
+          status: "active",
+          exchange: "ku coin"
+        }));
+
+        try {
+            const url = "http://localhost:3000/addCoin";
+            for (let i = 0; i < array.length; i++) {
+              axios.post(url, array[i]);
+            }
+            setKuBalance();
+            setTimeout(() => {
+                getCoins();
+            },1)
+          } catch (e) { 
+            console.log(e);
+          }
+
+
     } else {
       alert("Call the api first");
     }
@@ -91,6 +131,9 @@ export default function Home() {
       <Button className="bg-green" onClick={callBinance}>
         get binance
       </Button>
+      <Button className="bg-green" onClick={callKu}>
+        get Ku
+      </Button>
 
       {binanceBalance && (
         <Table sx={{maxWidth: '400px'}} className="">
@@ -110,6 +153,24 @@ export default function Home() {
           </TableBody>
         </Table>
       )}
+      {kuBalance && (
+        <Table sx={{maxWidth: '400px'}} className="">
+          <TableHead>
+            <TableRow className="bg-green-600">
+              <TableCell className="px-4 py-2">Coin</TableCell>
+              <TableCell className="px-4 py-2">Balance</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {kuBalance.map((coin) => (
+              <TableRow className="border-b">
+                <TableCell className="px-4 py-2">{coin.currency}</TableCell>
+                <TableCell className="px-4 py-2">{coin.balance}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
       <Button className="bg-green-600" onClick={addCoins}>
         Add to Db
       </Button>
@@ -117,8 +178,9 @@ export default function Home() {
        <Table className="p-4 border-collapse border border-gray-200">
           <TableHead>
           <TableRow className="bg-gray-500 p-4" >
-              <TableCell className="px-4 py-2">Coin </TableCell>
-              <TableCell className="px-4 py-2">avgBuyAmount</TableCell>
+              <TableCell className="px-4 py-2"># </TableCell>
+              <TableCell className="px-4 py-2">Name </TableCell>
+              <TableCell className="px-4 py-2">Avg Buy Amount</TableCell>
               <TableCell className="px-4 py-2">Quantity</TableCell>
               <TableCell className="px-4 py-2">Invested</TableCell>
               <TableCell className="px-4 py-2">Date</TableCell>
@@ -127,8 +189,9 @@ export default function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {myCoins.map((coin) => (
+            {myCoins.map((coin,index) => (
               <TableRow className="hover:bg-gray-500 p-4">
+                <TableCell className="px-4 py-2">{index+1}</TableCell>
                 <TableCell className="px-4 py-2">{coin.name}</TableCell>
                 <TableCell className="px-4 py-2">{coin.avgBuyAmount.toFixed(2)}</TableCell>
                 <TableCell className="px-4 py-2">{coin.quantity}</TableCell>

@@ -9,6 +9,7 @@ async function createCoin({
   investedAmount,
   lastDate,
   status,
+  exchange
 }) {
   try {
     let ExistCoin = await coinModel.findOne({ name: name });
@@ -28,7 +29,7 @@ async function createCoin({
           quantity,
           investedAmount: Math.ceil(trade.quoteQty),
           date: trade.time,
-          exchange: 'binance',
+          exchange,
           status: "active",
         });
       }else {

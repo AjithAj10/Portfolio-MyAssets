@@ -147,7 +147,6 @@ async function updateKucoinDB(name, quantity, exchange) {
           status: "in-progress",
         });
         await coinModel.create(newCoin);
-        console.log(name, "2nt");
       }
     } else {
       const avg = 10 / quantity;
@@ -161,7 +160,6 @@ async function updateKucoinDB(name, quantity, exchange) {
         status: "in-progress",
       });
       await coinModel.create(newCoin);
-      console.log(name, "3rd");
     }
   } catch (err) {
     console.log(err, "error");

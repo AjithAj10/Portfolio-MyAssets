@@ -29,7 +29,6 @@ export default function Home() {
   const callKu = async () => {
     try {
       const result = await axios.get("http://localhost:3100/ku/assets");
-      console.log(result.data);
       setKuBalance(result.data);
     } catch (e) {
       console.log(e);
@@ -38,7 +37,6 @@ export default function Home() {
 
   const addCoins = async () => {
     if (binanceBalance && binanceBalance.length > 0) {
-        console.log('adding binance coins');
       const date = new Date();
 
       let array = binanceBalance.map((coin) => ({
@@ -62,7 +60,6 @@ export default function Home() {
       }
     }else if(kuBalance && kuBalance.length > 0) {
         const date = new Date();
-        console.log('adding Ku coins');
 
         let array = kuBalance.map((coin) => ({
           name: coin.currency,

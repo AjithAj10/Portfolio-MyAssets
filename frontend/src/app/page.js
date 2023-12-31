@@ -20,7 +20,7 @@ export default function Home() {
   }, []);
   const callBinance = async () => {
     try {
-      const result = await axios.get("http://localhost:3000/binance/assets");
+      const result = await axios.get("http://localhost:3100/binance/assets");
       setBinanceBalance(result.data);
     } catch (e) {
       console.log(e);
@@ -28,7 +28,7 @@ export default function Home() {
   };
   const callKu = async () => {
     try {
-      const result = await axios.get("http://localhost:3000/ku/assets");
+      const result = await axios.get("http://localhost:3100/ku/assets");
       console.log(result.data);
       setKuBalance(result.data);
     } catch (e) {
@@ -52,7 +52,7 @@ export default function Home() {
       }));
 
       try {
-        const url = "http://localhost:3000/addCoin";
+        const url = "http://localhost:3100/addCoin";
         for (let i = 0; i < array.length; i++) {
           axios.post(url, array[i]);
         }
@@ -71,11 +71,11 @@ export default function Home() {
           investedAmount: 10, // Please adjust this value according to your logic
           lastDate: date,
           status: "active",
-          exchange: "ku coin"
+          exchange: "ku_coin"
         }));
 
         try {
-            const url = "http://localhost:3000/addCoin";
+            const url = "http://localhost:3100/addCoin";
             for (let i = 0; i < array.length; i++) {
               axios.post(url, array[i]);
             }
@@ -95,7 +95,7 @@ export default function Home() {
 
   const getCoins = async () => {
     try {
-      const url = "http://localhost:3000/viewCoins";
+      const url = "http://localhost:3100/viewCoins";
 
       let data = await axios.get(url);
       setMyCoins(data.data);
@@ -110,7 +110,7 @@ export default function Home() {
   };
 
   const editCoinFn = async () => {
-    const val = await axios.post("http://localhost:3000/edit/coin", {
+    const val = await axios.post("http://localhost:3100/edit/coin", {
       ...editCoin,
     });
     if (val.status >= 200 && val.status < 300) {
@@ -177,7 +177,7 @@ export default function Home() {
       {myCoins && (
        <Table className="p-4 border-collapse border border-gray-200">
           <TableHead>
-          <TableRow className="bg-gray-500 p-4" >
+          <TableRow className="bg-gray-500 p-4"  >
               <TableCell className="px-4 py-2"># </TableCell>
               <TableCell className="px-4 py-2">Name </TableCell>
               <TableCell className="px-4 py-2">Avg Buy Amount</TableCell>
@@ -190,7 +190,7 @@ export default function Home() {
           </TableHead>
           <TableBody>
             {myCoins.map((coin,index) => (
-              <TableRow className="hover:bg-gray-500 p-4">
+              <TableRow className="hover:bg-gray-500 p-4" sx={coin.exchange === "binance" ? {background:'#f1ae13'} : {background:'#21af91'}  }>
                 <TableCell className="px-4 py-2">{index+1}</TableCell>
                 <TableCell className="px-4 py-2">{coin.name}</TableCell>
                 <TableCell className="px-4 py-2">{coin.avgBuyAmount.toFixed(2)}</TableCell>

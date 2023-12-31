@@ -5,7 +5,7 @@ const imageParser = require("./dataFromImage.js");
 const AddCoin = require("./AddCoin");
 const Ku_API_KEY = "654cf8e93872490001ce73f3";
 const axios = require("axios");
-const KuCoin = require("./kucoin.js");
+const KuCoin = require("./KuCoin.js");
 
 router.get("/binance/assets", async (req, res) => {
   try {
@@ -67,16 +67,6 @@ router.use("/ku/trades", async (req, res) => {
     console.log(err);
   }
 });
-const coinModel = require("./Models/coins");
 
-router.use("/remove/todays-entry", async (req, res) => {
-
-coinModel.deleteMany({
-  createdAt: {
-    $gte: new Date(new Date().setHours(0, 0, 0, 0)), // Beginning of today
-    $lt: new Date(new Date().setHours(23, 59, 59, 999)), // End of today
-  }
-});
-})
 
 module.exports = router;

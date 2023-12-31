@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const coinModel = require("./Models/coins");
 const { getLatestTrades } = require("./Binance");
+const { getTades } = require("./KuCoin");
 
 async function createCoin({
   name,
@@ -9,16 +10,29 @@ async function createCoin({
   investedAmount,
   lastDate,
   status,
-  exchange
+  exchange,
 }) {
   try {
     let ExistCoin = await coinModel.findOne({ name: name });
-    let trades = await getLatestTrades(`${name}USDT`);
 
-    if(ExistCoin && ExistCoin.quantity == quantity){
+    if (ExistCoin && ExistCoin.quantity == quantity) {
       console.log(name + " exist");
       return;
     }
+
+    if (quantity == 0) {
+      return;
+    }
+
+    let trades = null;
+
+    if (exchange === "ku_coin") {
+      updateKucoinDB(name, quantity, exchange);
+      return;
+    } else {
+      trades = await getLatestTrades(`${name}USDT`);
+    }
+
     if (!ExistCoin) {
       let newCoin;
       if (!(Math.abs(trades[trades.length - 1].qty - quantity) > 0.1)) {
@@ -32,17 +46,17 @@ async function createCoin({
           exchange,
           status: "active",
         });
-      }else {
-        const avg = 10/quantity;
+      } else {
+        const avg = 10 / quantity;
         newCoin = new coinModel({
           name,
           avgBuyAmount: avg,
           quantity,
           investedAmount: 10,
           date: trades[trades.length - 1].time,
-          exchange: 'binance',
+          exchange: "binance",
           status: "in-progress",
-        })
+        });
       }
       await coinModel.create(newCoin);
     } else {
@@ -72,31 +86,85 @@ async function createCoin({
           const InvestAsString = trades[trades.length - i - 1].quoteQty;
           const InvestAsNumber = parseFloat(InvestAsString);
           findInvested += InvestAsNumber;
-          
-          if(findQty - quantity <= 0 && findQty - quantity >= -0.1) {
+
+          if (findQty - quantity <= 0 && findQty - quantity >= -0.1) {
             i = trades.length;
             break;
+          }
+          if (i == trades.length - 1) {
+            findQty = quantity;
+            findInvested = 0;
+          }
         }
-        if( i == trades.length - 1 ) {
-          findQty = quantity;
-          findInvested = 0;
-        }
+        if (findInvested) avgBuyAmount = findInvested / quantity;
+
+        editCoin({
+          name,
+          avgBuyAmount,
+          quantity,
+          investedAmount: findInvested ? findInvested : investedAmount,
+          date: trade.time,
+          status: findInvested ? "active" : "in-progress",
+        });
       }
-      if(findInvested)  avgBuyAmount = findInvested / quantity;
-      
-      editCoin({
-        name,
-        avgBuyAmount,
-        quantity,
-        investedAmount: findInvested ? findInvested : investedAmount,
-        date: trade.time,
-        status: findInvested ? "active" : "in-progress",
-      });
     }
-  }
     return;
   } catch (e) {
     console.log(e);
+  }
+}
+
+async function updateKucoinDB(name, quantity, exchange) {
+  const allTrades = await getTades();
+  let trades = allTrades.filter((trade) => trade.symbol === `${name}-USDT`);
+  if (quantity == 0) return;
+
+  let newCoin;
+
+  try {
+    if (trades.length > 0) {
+      if (!(Math.abs(trades[trades.length - 1].size - quantity) > 0.1)) {
+        const trade = trades[trades.length - 1];
+        newCoin = new coinModel({
+          name,
+          avgBuyAmount: trade.price,
+          quantity,
+          investedAmount: Math.ceil(trade.funds),
+          date: trade.createdAt,
+          exchange,
+          status: "active",
+        });
+        await coinModel.create(newCoin);
+      } else {
+        const avg = 10 / quantity;
+        newCoin = new coinModel({
+          name,
+          avgBuyAmount: avg,
+          quantity,
+          investedAmount: 10,
+          date: Date.now(),
+          exchange: exchange,
+          status: "in-progress",
+        });
+        await coinModel.create(newCoin);
+        console.log(name, "2nt");
+      }
+    } else {
+      const avg = 10 / quantity;
+      newCoin = new coinModel({
+        name,
+        avgBuyAmount: avg,
+        quantity,
+        investedAmount: 10,
+        date: Date.now(),
+        exchange: exchange,
+        status: "in-progress",
+      });
+      await coinModel.create(newCoin);
+      console.log(name, "3rd");
+    }
+  } catch (err) {
+    console.log(err, "error");
   }
 }
 async function viewCoins() {
@@ -152,8 +220,6 @@ async function editCoin({
       update,
       options
     );
-
-    //console.log(updatedCoin); // Log the updated document if needed
 
     return updatedCoin;
   } catch (e) {

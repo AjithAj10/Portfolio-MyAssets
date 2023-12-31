@@ -23,6 +23,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CoinsTable from "../components/CoinsTable";
+import "./style.css";
 
 export default function Home() {
   const [binanceBalance, setBinanceBalance] = useState();
@@ -33,6 +34,16 @@ export default function Home() {
   useEffect(() => {
     getCoins();
   }, []);
+
+  useEffect(() => {
+    let apiFetch = () => {
+      axios.get("https://api.coincap.io/v2/assets").then((e) => {
+        console.log("call", e);
+      });
+    };
+    apiFetch();
+  }, []);
+
   const callBinance = async () => {
     try {
       const result = await axios.get("http://localhost:3100/binance/assets");
@@ -209,9 +220,16 @@ export default function Home() {
             <TableBody>
               {myCoins.map((coin, index) => (
                 // {background:'#f1ae13'} : {background:'#21af91'}
-                <TableRow className="hover:bg-gray-500 p-4">
+                <TableRow key={index} className="hover:bg-gray-500 p-4">
                   <TableCell className="px-4 py-2">{index + 1}</TableCell>
-                  <TableCell className="px-4 py-2">{coin.name}</TableCell>
+                  <TableCell className="name">
+                    <img
+                      className="coinImg"
+                      src={`https://assets.coincap.io/assets/icons/${coin.name.toLowerCase()}%402x.png`}
+                      alt={coin.name}
+                    />{" "}
+                    {coin.name}
+                  </TableCell>
                   <TableCell className="px-4 py-2">
                     {coin.avgBuyAmount.toFixed(2)}
                   </TableCell>
@@ -252,15 +270,19 @@ export default function Home() {
         >
           <Card
             sx={{
-              position: "fixed",
-              //top: 100, // Adjust position as needed
-              //left: 400,
-              width: '80%',
+              width: "80%",
               maxWidth: 600,
             }}
           >
             <CardContent>
-              <Typography variant="h5">{editCoin.name}</Typography>
+              <Box sx={{display:'flex'}} className="name">
+                <img
+                  className="coinImg"
+                  src={`https://assets.coincap.io/assets/icons/${editCoin.name.toLowerCase()}%402x.png`}
+                  alt={editCoin.name}
+                />
+                <Typography variant="h5">{editCoin.name}</Typography>
+              </Box>
               <TextField
                 label="Avg"
                 type="number"
@@ -315,16 +337,19 @@ export default function Home() {
                 <MenuItem value="closing">Closing</MenuItem>
                 <MenuItem value="sold">Sold</MenuItem>
               </Select>
-              <div style={{ marginBottom: "1.5em" }}>
-              </div>
-              <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                <Button sx={{marginRight: '1em'}} variant="contained" onClick={editCoinFn}>
+              <div style={{ marginBottom: "1.5em" }}></div>
+              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  sx={{ marginRight: "1em" }}
+                  variant="contained"
+                  onClick={editCoinFn}
+                >
                   Save
                 </Button>
                 <Button variant="outlined" onClick={() => setEditCoin("")}>
                   Cancel
                 </Button>
-                </Box>
+              </Box>
             </CardContent>
           </Card>
         </div>

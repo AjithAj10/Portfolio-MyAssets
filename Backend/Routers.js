@@ -5,7 +5,7 @@ const imageParser = require("./dataFromImage.js");
 const AddCoin = require("./AddCoin");
 const Ku_API_KEY = "654cf8e93872490001ce73f3";
 const axios = require("axios");
-const KuCoin = require("./kucoin.js");
+const KuCoin = require("./KuCoin.js");
 
 router.get("/binance/assets", async (req, res) => {
   try {
@@ -67,5 +67,6 @@ router.use("/ku/trades", async (req, res) => {
     console.log(err);
   }
 });
+
 
 module.exports = router;

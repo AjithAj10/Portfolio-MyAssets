@@ -14,7 +14,7 @@ export default function Home() {
   }, []);
   const callBinance = async () => {
     try {
-      const result = await axios.get("http://localhost:3000/binance/assets");
+      const result = await axios.get("http://localhost:3100/binance/assets");
       setBinanceBalance(result.data);
     } catch (e) {
       console.log(e);
@@ -35,7 +35,7 @@ export default function Home() {
       }));
 
       try {
-        const url = "http://localhost:3000/addCoin";
+        const url = "http://localhost:3100/addCoin";
         for (let i = 0; i < array.length; i++) {
           axios.post(url, array[i]);
         }
@@ -50,7 +50,7 @@ export default function Home() {
 
   const getCoins = async () => {
     try {
-      const url = "http://localhost:3000/viewCoins";
+      const url = "http://localhost:3100/viewCoins";
 
       let data = await axios.get(url);
       setMyCoins(data.data);
@@ -65,7 +65,7 @@ export default function Home() {
   };
 
   const editCoinFn = async () => {
-    const val = await axios.post("http://localhost:3000/edit/coin", {
+    const val = await axios.post("http://localhost:3100/edit/coin", {
       ...editCoin,
     });
     if (val.status >= 200 && val.status < 300) {

@@ -9,8 +9,8 @@ const getCoins =  async () => {
 }
 const getTades = async () => {
     const res = await API.rest.Trade.Fills.getFillsList();
-    let coins = res.data.items.filter(e => e.balance > 0.1);
-    return coins;  
+    let trades = res.data.items;
+    return trades;  
 }
   //const getTimestampRl = await API.rest.Others.getTimestamp();
 

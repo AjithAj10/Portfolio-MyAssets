@@ -30,6 +30,7 @@ export default function Home() {
   const [binanceBalance, setBinanceBalance] = useState();
   const [kuBalance, setKuBalance] = useState();
   const [myCoins, setMyCoins] = useState();
+  const [filteredCoins, setFilteredCoins] = useState([]);
   const [editCoin, setEditCoin] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -46,6 +47,11 @@ export default function Home() {
     };
     apiFetch();
   }, []);
+
+  useEffect(() => {
+    if(myCoins)
+    setFilteredCoins(myCoins);
+  },[myCoins])
 
   const callBinance = async () => {
     try {
@@ -142,6 +148,13 @@ export default function Home() {
     }
   };
 
+  function editAvgFn(e) {
+    const avg = e.target.value;
+
+    const invested = (editCoin.quantity * avg).toFixed(2);
+    setEditCoin({ ...editCoin, investedAmount: invested, avgBuyAmount: avg})
+  }
+
   const editCoinFn = async () => {
     const val = await axios.post("http://localhost:3100/edit/coin", {
       ...editCoin,
@@ -158,6 +171,13 @@ export default function Home() {
     let avg = (val / editCoin.quantity).toFixed(2);
     setEditCoin({ ...editCoin, avgBuyAmount: avg, investedAmount: val });
   };
+
+  const searchFn = (e) => {    
+    const searchTerm = e.target.value.toLowerCase();
+    const filter = myCoins.filter(coin => coin.name.toLowerCase().startsWith(searchTerm));
+  
+    setFilteredCoins(filter);
+  }
 
   return (
     <Container maxWidth={"xl"} className="">
@@ -207,15 +227,18 @@ export default function Home() {
       <Button className="bg-green-600" onClick={addCoins}>
         Add to Db
       </Button>
+
+      {myCoins && <TextField placeholder="search coin" label="Search"  margin="normal"
+                fullWidth onChange={searchFn} />}
       {myCoins && (
-        <TableContainer component={Paper}>
+        <TableContainer sx={{overflow: 'scroll'}} component={Paper}>
           
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>#</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Avg Buy Amount</TableCell>
+                <TableCell><div className="mobile-hide">Avg Buy Amount</div><div className="pc-hide">Avg</div></TableCell>
                 <TableCell>Quantity</TableCell>
                 <TableCell>Invested</TableCell>
                 <TableCell>Date</TableCell>
@@ -224,7 +247,7 @@ export default function Home() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {myCoins
+              {filteredCoins
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((coin, index) => (
                   <TableRow key={index} hover>
@@ -288,7 +311,7 @@ export default function Home() {
             }}
           >
             <CardContent>
-              <Box sx={{display:'flex'}} className="name">
+              <Box className="name">
                 <img
                   className="coinImg"
                   src={`https://assets.coincap.io/assets/icons/${editCoin.name.toLowerCase()}%402x.png`}
@@ -300,9 +323,7 @@ export default function Home() {
                 label="Avg"
                 type="number"
                 value={editCoin.avgBuyAmount}
-                onChange={(e) =>
-                  setEditCoin({ ...editCoin, avgBuyAmount: e.target.value })
-                }
+                onChange={editAvgFn }
                 disabled={false} // Assuming this field should be editable
                 margin="normal"
                 fullWidth
@@ -341,7 +362,7 @@ export default function Home() {
                 value={editCoin.status}
                 onChange={(e) =>
                   setEditCoin({ ...editCoin, investedAmount: e.target.value })
-                } // Should this update investedAmount or status?
+                } 
                 margin="normal"
                 fullWidth
               >

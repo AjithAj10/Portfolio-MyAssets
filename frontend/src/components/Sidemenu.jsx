@@ -6,8 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import List from '@mui/material/List';
+import Link from 'next/link';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -22,6 +21,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { Settings } from '@mui/icons-material';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import { List } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -33,6 +33,11 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const SideData = [{Title: 'Dashboard',url:'/dashboard' },
+  {Title: 'Gainers',url:'/gainers' },
+  {Title: 'Exchanges',url:'/exchanges' },
+  {Title: 'Drafts',url:'/drafts' }]
+
   const IconsArr = [<SpaceDashboardIcon />,<MovingIcon />,<AccountBalanceIcon />,<ReceiptLongIcon />];
   const IconsArr2 = [<Settings />,<CurrencyExchangeIcon />];
   const drawer = (
@@ -40,14 +45,16 @@ function ResponsiveDrawer(props) {
       <Toolbar />
       <Divider />
       <List>
-        {['Dashboard', 'Gainers', 'Exchanges', 'Drafts'].map((text, index) => (
+        {SideData.map((text, index) => (
           <ListItem key={text} disablePadding>
+            <Link href={text.url} >
             <ListItemButton>
               <ListItemIcon>
                 {IconsArr[index]}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text.Title} />
             </ListItemButton>
+            </Link>
           </ListItem>
         ))}
       </List>
@@ -74,10 +81,11 @@ function ResponsiveDrawer(props) {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar
-        position="fixed"
+        position="absolute"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          maxHeight: '64px'
         }}
       >
         <Toolbar>

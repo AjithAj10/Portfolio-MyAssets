@@ -16,6 +16,7 @@ import {
   Select,
   MenuItem,
   Box,
+  TablePagination,
 } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -30,6 +31,8 @@ export default function Home() {
   const [kuBalance, setKuBalance] = useState();
   const [myCoins, setMyCoins] = useState();
   const [editCoin, setEditCoin] = useState();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
 
   useEffect(() => {
     getCoins();
@@ -59,6 +62,15 @@ export default function Home() {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const addCoins = async () => {
@@ -196,61 +208,62 @@ export default function Home() {
         Add to Db
       </Button>
       {myCoins && (
-        <TableContainer>
-          <Table className="">
+        <TableContainer component={Paper}>
+          
+          <Table>
             <TableHead>
-              <TableRow
-                className=""
-                sx={{
-                  textAlign: "center",
-                  fontWeight: 700,
-                  position: "sticky",
-                }}
-              >
-                <TableCell sx={{ fontWeight: 700 }}># </TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Name </TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Avg Buy Amount</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Quantity</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Invested</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Date</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Status</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Edit</TableCell>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Avg Buy Amount</TableCell>
+                <TableCell>Quantity</TableCell>
+                <TableCell>Invested</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Edit</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {myCoins.map((coin, index) => (
-                // {background:'#f1ae13'} : {background:'#21af91'}
-                <TableRow key={index} className="hover:bg-gray-500 p-4">
-                  <TableCell className="px-4 py-2">{index + 1}</TableCell>
-                  <TableCell className="name">
-                    <img
-                      className="coinImg"
-                      src={`https://assets.coincap.io/assets/icons/${coin.name.toLowerCase()}%402x.png`}
-                      alt={coin.name}
-                    />{" "}
-                    {coin.name}
-                  </TableCell>
-                  <TableCell className="px-4 py-2">
-                    {coin.avgBuyAmount.toFixed(2)}
-                  </TableCell>
-                  <TableCell className="px-4 py-2">{coin.quantity}</TableCell>
-                  <TableCell className="px-4 py-2">
-                    {coin.investedAmount}
-                  </TableCell>
-                  <TableCell className="px-4 py-2">{coin.lastDate}</TableCell>
-                  <TableCell className="px-4 py-2">{coin.status}</TableCell>
-                  <TableCell>
-                    <Button
-                      className="bg-orange-600 px-3 py-1 m-2"
-                      onClick={() => setEditCoin(coin)}
-                    >
-                      Edit
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {myCoins
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((coin, index) => (
+                  <TableRow key={index} hover>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      <img
+                        className="coinImg"
+                        src={`https://assets.coincap.io/assets/icons/${coin.name.toLowerCase()}%402x.png`}
+                        alt={coin.name}
+                      />{" "}
+                      {coin.name}
+                    </TableCell>
+                    <TableCell>{coin.avgBuyAmount.toFixed(2)}</TableCell>
+                    <TableCell>{coin.quantity}</TableCell>
+                    <TableCell>{coin.investedAmount}</TableCell>
+                    <TableCell>{coin.lastDate}</TableCell>
+                    <TableCell>{coin.status}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => setEditCoin(coin)}
+                      >
+                        Edit
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={myCoins.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </TableContainer>
       )}
       {editCoin && (

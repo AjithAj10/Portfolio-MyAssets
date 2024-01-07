@@ -27,7 +27,7 @@ async function createCoin({
     let trades = null;
 
     if (exchange === "ku_coin") {
-      updateKucoinDB(name, quantity, exchange);
+      updateKucoinDB(name, quantity, exchange, ExistCoin);
       return;
     } else {
       trades = await getLatestTrades(`${name}USDT`);
@@ -114,26 +114,33 @@ async function createCoin({
   }
 }
 
-async function updateKucoinDB(name, quantity, exchange) {
+async function updateKucoinDB(name, quantity, exchange, ExistCoin) {
   const allTrades = await getTades();
   let trades = allTrades.filter((trade) => trade.symbol === `${name}-USDT`);
   if (quantity == 0) return;
 
   let newCoin;
+  let avgAmount;
+
+  if (ExistCoin) {
+    avgAmount = (trade.price + ExistCoin.avgBuyAmount) / 2;
+  } else avgAmount = trade.price;
 
   try {
     if (trades.length > 0) {
       if (!(Math.abs(trades[trades.length - 1].size - quantity) > 0.1)) {
         const trade = trades[trades.length - 1];
+
         newCoin = new coinModel({
           name,
-          avgBuyAmount: trade.price,
+          avgBuyAmount: avgAmount,
           quantity,
           investedAmount: Math.ceil(trade.funds),
           date: trade.createdAt,
           exchange,
           status: "active",
         });
+
         await coinModel.create(newCoin);
       } else {
         const avg = 10 / quantity;
@@ -146,7 +153,8 @@ async function updateKucoinDB(name, quantity, exchange) {
           exchange: exchange,
           status: "in-progress",
         });
-        await coinModel.create(newCoin);
+        if (ExistCoin) await coinModel.updateOne({ id: ExistCoin.id, exchange:"ku_coin"}, newCoin);
+        else await coinModel.create(newCoin);
       }
     } else {
       const avg = 10 / quantity;

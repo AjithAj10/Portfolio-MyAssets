@@ -40,13 +40,7 @@ function ResponsiveDrawer(props) {
     { Title: "Drafts", url: "/drafts" },
   ];
 
-  const IconsArr = [
-    <SpaceDashboardIcon />,
-    <MovingIcon />,
-    <AccountBalanceIcon />,
-    <ReceiptLongIcon />,
-  ];
-  const IconsArr2 = [<Settings />, <CurrencyExchangeIcon />];
+  
   const drawer = (
     <div>
       <Toolbar />
@@ -56,7 +50,7 @@ function ResponsiveDrawer(props) {
           <ListItem key={index} disablePadding>
             <Link href={text.url}>
               <ListItemButton disablePadding key={index}>
-                <ListItemIcon disablePadding>{IconsArr[index]}</ListItemIcon>
+                {/* <ListItemIcon disablePadding>{IconsArr[index]}</ListItemIcon> */}
                 <ListItemText primary={text.Title} />
               </ListItemButton>
             </Link>

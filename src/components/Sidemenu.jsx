@@ -1,27 +1,27 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import Link from 'next/link';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
-import MovingIcon from '@mui/icons-material/Moving';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import { Settings } from '@mui/icons-material';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
-import { List } from '@mui/material';
+import * as React from "react";
+import PropTypes from "prop-types";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Link from "next/link";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import MovingIcon from "@mui/icons-material/Moving";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import { Settings } from "@mui/icons-material";
+import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
+import { List } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -33,13 +33,20 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const SideData = [{Title: 'Dashboard',url:'/dashboard' },
-  {Title: 'Gainers',url:'/gainers' },
-  {Title: 'Exchanges',url:'/exchanges' },
-  {Title: 'Drafts',url:'/drafts' }]
+  const SideData = [
+    { Title: "Dashboard", url: "/dashboard" },
+    { Title: "Gainers", url: "/gainers" },
+    { Title: "Exchanges", url: "/exchanges" },
+    { Title: "Drafts", url: "/drafts" },
+  ];
 
-  const IconsArr = [<SpaceDashboardIcon />,<MovingIcon />,<AccountBalanceIcon />,<ReceiptLongIcon />];
-  const IconsArr2 = [<Settings />,<CurrencyExchangeIcon />];
+  const IconsArr = [
+    <SpaceDashboardIcon />,
+    <MovingIcon />,
+    <AccountBalanceIcon />,
+    <ReceiptLongIcon />,
+  ];
+  const IconsArr2 = [<Settings />, <CurrencyExchangeIcon />];
   const drawer = (
     <div>
       <Toolbar />
@@ -47,25 +54,21 @@ function ResponsiveDrawer(props) {
       <List>
         {SideData.map((text, index) => (
           <ListItem key={index} disablePadding>
-            <Link href={text.url} >
-            <ListItemButton>
-              <ListItemIcon>
-                {IconsArr[index]}
-              </ListItemIcon>
-              <ListItemText primary={text.Title} />
-            </ListItemButton>
+            <Link href={text.url}>
+              <ListItemButton>
+                <ListItemIcon>{IconsArr[index]}</ListItemIcon>
+                <ListItemText primary={text.Title} />
+              </ListItemButton>
             </Link>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {['Settings', 'Trade'].map((text, index) => (
+        {["Settings", "Trade"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                {IconsArr2[index]}
-              </ListItemIcon>
+              <ListItemIcon>{IconsArr2[index]}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -75,17 +78,18 @@ function ResponsiveDrawer(props) {
   );
 
   // Remove this const when copying and pasting into your project.
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
         position="absolute"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          maxHeight: '64px'
+          maxHeight: "64px",
         }}
       >
         <Toolbar>
@@ -94,7 +98,7 @@ function ResponsiveDrawer(props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
@@ -118,8 +122,11 @@ function ResponsiveDrawer(props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
         >
           {drawer}
@@ -127,8 +134,11 @@ function ResponsiveDrawer(props) {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
           open
         >
@@ -137,10 +147,14 @@ function ResponsiveDrawer(props) {
       </Box>
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
       >
         <Toolbar />
-       {props.children}
+        {props.children}
       </Box>
     </Box>
   );

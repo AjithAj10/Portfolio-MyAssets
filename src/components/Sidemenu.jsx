@@ -55,8 +55,8 @@ function ResponsiveDrawer(props) {
         {SideData.map((text, index) => (
           <ListItem key={index} disablePadding>
             <Link href={text.url}>
-              <ListItemButton>
-                <ListItemIcon>{IconsArr[index]}</ListItemIcon>
+              <ListItemButton disablePadding key={index}>
+                <ListItemIcon disablePadding>{IconsArr[index]}</ListItemIcon>
                 <ListItemText primary={text.Title} />
               </ListItemButton>
             </Link>
@@ -64,7 +64,7 @@ function ResponsiveDrawer(props) {
         ))}
       </List>
       <Divider />
-      <List>
+      {/* <List>
         {["Settings", "Trade"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
@@ -73,7 +73,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </div>
   );
 

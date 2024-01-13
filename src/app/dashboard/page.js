@@ -54,7 +54,7 @@ export default function Home() {
 
   const callBinance = async () => {
     try {
-      const result = await axios.get("http://localhost:3100/binance/assets");
+      const result = await axios.get("https://portfolio-server-tz9s.onrender.com/binance/assets");
       setBinanceBalance(result.data);
     } catch (e) {
       console.log(e);
@@ -62,7 +62,7 @@ export default function Home() {
   };
   const callKu = async () => {
     try {
-      const result = await axios.get("http://localhost:3100/ku/assets");
+      const result = await axios.get("https://portfolio-server-tz9s.onrender.com/ku/assets");
       setKuBalance(result.data);
     } catch (e) {
       console.log(e);
@@ -93,7 +93,7 @@ export default function Home() {
       }));
 
       try {
-        const url = "http://localhost:3100/addCoin";
+        const url = "https://portfolio-server-tz9s.onrender.com/addCoin";
         for (let i = 0; i < array.length; i++) {
           axios.post(url, array[i]);
         }
@@ -115,7 +115,7 @@ export default function Home() {
       }));
 
       try {
-        const url = "http://localhost:3100/addCoin";
+        const url = "https://portfolio-server-tz9s.onrender.com/addCoin";
         for (let i = 0; i < array.length; i++) {
           axios.post(url, array[i]);
         }
@@ -133,7 +133,7 @@ export default function Home() {
 
   const getCoins = async () => {
     try {
-      const url = "http://localhost:3100/viewCoins";
+      const url = "https://portfolio-server-tz9s.onrender.com/viewCoins";
 
       let data = await axios.get(url);
       setMyCoins(data.data);
@@ -155,7 +155,7 @@ export default function Home() {
   }
 
   const editCoinFn = async () => {
-    const val = await axios.post("http://localhost:3100/edit/coin", {
+    const val = await axios.post("https://portfolio-server-tz9s.onrender.com/edit/coin", {
       ...editCoin,
     });
     if (val.status >= 200 && val.status < 300) {

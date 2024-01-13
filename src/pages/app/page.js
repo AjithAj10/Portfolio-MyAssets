@@ -97,8 +97,8 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {binanceBalance.map((coin) => (
-              <tr className="border-b">
+            {binanceBalance.map((coin,index) => (
+              <tr key={index} className="border-b">
                 <td className="px-4 py-2">{coin.coin}</td>
                 <td className="px-4 py-2">{coin.free}</td>
                 <td className="px-4 py-2">10</td>
@@ -124,8 +124,8 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {myCoins.map((coin) => (
-              <tr className="hover:bg-gray-500 p-4">
+            {myCoins.map((coin,index) => (
+              <tr key={index} className="hover:bg-gray-500 p-4">
                 <td className="px-4 py-2">{coin.name}</td>
                 <td className="px-4 py-2">{coin.avgBuyAmount.toFixed(2)}</td>
                 <td className="px-4 py-2">{coin.quantity}</td>

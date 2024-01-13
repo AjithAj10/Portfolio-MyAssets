@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createWorker } from "tesseract.js";
+import Image from 'next/image'
 import axios from "axios";
 import {
   Button,
@@ -23,7 +23,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import CoinsTable from "../../components/CoinsTable";
 import "../style.css";
 
 export default function Home() {
@@ -197,8 +196,8 @@ export default function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {binanceBalance.map((coin) => (
-              <TableRow className="border-b">
+            {binanceBalance.map((coin,index) => (
+              <TableRow key={index} className="border-b">
                 <TableCell className="px-4 py-2">{coin.coin}</TableCell>
                 <TableCell className="px-4 py-2">{coin.free}</TableCell>
               </TableRow>
@@ -215,8 +214,8 @@ export default function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {kuBalance.map((coin) => (
-              <TableRow className="border-b">
+            {kuBalance.map((coin,index) => (
+              <TableRow key={index} className="border-b">
                 <TableCell className="px-4 py-2">{coin.currency}</TableCell>
                 <TableCell className="px-4 py-2">{coin.balance}</TableCell>
               </TableRow>
@@ -253,7 +252,7 @@ export default function Home() {
                   <TableRow key={index} hover>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
-                      <img
+                      <Image
                         className="coinImg"
                         src={`https://assets.coincap.io/assets/icons/${coin.name.toLowerCase()}%402x.png`}
                         alt={coin.name}
@@ -312,7 +311,7 @@ export default function Home() {
           >
             <CardContent>
               <Box className="name">
-                <img
+                <Image
                   className="coinImg"
                   src={`https://assets.coincap.io/assets/icons/${editCoin.name.toLowerCase()}%402x.png`}
                   alt={editCoin.name}

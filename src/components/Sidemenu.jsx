@@ -46,7 +46,7 @@ function ResponsiveDrawer(props) {
       <Divider />
       <List>
         {SideData.map((text, index) => (
-          <ListItem key={text} disablePadding>
+          <ListItem key={index} disablePadding>
             <Link href={text.url} >
             <ListItemButton>
               <ListItemIcon>

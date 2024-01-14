@@ -40,7 +40,7 @@ function ResponsiveDrawer(props) {
     { Title: "Drafts", url: "/drafts" },
   ];
 
-  const IconsArr = [<SpaceDashboardIcon />,<MovingIcon />,<AccountBalanceIcon />,<ReceiptLongIcon />];
+  const IconsArr = [<SpaceDashboardIcon key={'a'} />,<MovingIcon key={'b'}/>,<AccountBalanceIcon key={'c'} />,<ReceiptLongIcon key={'d'}/>];
 
   
   const drawer = (
@@ -51,8 +51,8 @@ function ResponsiveDrawer(props) {
         {SideData.map((text, index) => (
           <ListItem key={index} sx={{padding: 0}} >
             <Link href={text.url}  style={{width: '100%',margin: 0, paddingTop: '8px',paddingLeft:"4px", paddingRight:"4px"}}>
-              <ListItemButton  key={index} sx={{width: '100%'}}>
-                 <ListItemIcon key={index}>{IconsArr[index]}</ListItemIcon>
+              <ListItemButton >
+                 <ListItemIcon >{IconsArr[index]}</ListItemIcon>
                 <ListItemText primary={text.Title} sx={{width: '100px'}} />
               </ListItemButton>
             </Link>

@@ -40,6 +40,8 @@ function ResponsiveDrawer(props) {
     { Title: "Drafts", url: "/drafts" },
   ];
 
+  const IconsArr = [<SpaceDashboardIcon />,<MovingIcon />,<AccountBalanceIcon />,<ReceiptLongIcon />];
+
   
   const drawer = (
     <div>

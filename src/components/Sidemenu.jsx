@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
@@ -23,7 +24,7 @@ import { Button, List } from "@mui/material";
 
 const drawerWidth = 240;
 
-function sidemenu(props) {
+function Sidemenu(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -164,4 +165,4 @@ sidemenu.propTypes = {
   window: PropTypes.func,
 };
 
-export default sidemenu;
+export default Sidemenu;

@@ -50,7 +50,7 @@ function ResponsiveDrawer(props) {
           <ListItem key={index} sx={{padding: 0}} >
             <Link href={text.url}  style={{width: '100%',margin: 0, paddingTop: '8px',paddingLeft:"4px", paddingRight:"4px"}}>
               <ListItemButton  key={index} sx={{width: '100%'}}>
-                {/* <ListItemIcon >{IconsArr[index]}</ListItemIcon> */}
+                 <ListItemIcon >{IconsArr[index]}</ListItemIcon>
                 <ListItemText primary={text.Title} sx={{width: '100px'}} />
               </ListItemButton>
             </Link>
@@ -97,7 +97,7 @@ function ResponsiveDrawer(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+            Crypto Portfolio
           </Typography>
         </Toolbar>
       </AppBar>

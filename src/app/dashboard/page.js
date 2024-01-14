@@ -254,6 +254,8 @@ export default function Home() {
                     <TableCell>
                       <Image
                         className="coinImg"
+                        width={25}
+                        height={26}
                         src={`https://assets.coincap.io/assets/icons/${coin.name.toLowerCase()}%402x.png`}
                         alt={coin.name}
                       />{" "}

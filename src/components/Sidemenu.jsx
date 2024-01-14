@@ -47,11 +47,11 @@ function ResponsiveDrawer(props) {
       <Divider />
       <List>
         {SideData.map((text, index) => (
-          <ListItem key={index} >
-            <Link href={text.url}>
-              <ListItemButton  key={index}>
+          <ListItem key={index} sx={{padding: 0}} >
+            <Link href={text.url}  style={{width: '100%',margin: 0, paddingTop: '8px',paddingLeft:"4px", paddingRight:"4px"}}>
+              <ListItemButton  key={index} sx={{width: '100%'}}>
                 {/* <ListItemIcon >{IconsArr[index]}</ListItemIcon> */}
-                <ListItemText primary={text.Title} />
+                <ListItemText primary={text.Title} sx={{width: '100px'}} />
               </ListItemButton>
             </Link>
           </ListItem>

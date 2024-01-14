@@ -19,13 +19,11 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import MovingIcon from "@mui/icons-material/Moving";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import { Settings } from "@mui/icons-material";
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import { List } from "@mui/material";
+import { Button, List } from "@mui/material";
 
 const drawerWidth = 240;
 
-function ResponsiveDrawer(props) {
+function sidemenu(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -42,7 +40,8 @@ function ResponsiveDrawer(props) {
 
   const IconsArr = [<SpaceDashboardIcon key={'a'} />,<MovingIcon key={'b'}/>,<AccountBalanceIcon key={'c'} />,<ReceiptLongIcon key={'d'}/>];
 
-  
+ 
+
   const drawer = (
     <div>
       <Toolbar />
@@ -53,7 +52,7 @@ function ResponsiveDrawer(props) {
             <Link href={text.url}  style={{width: '100%',margin: 0, paddingTop: '8px',paddingLeft:"4px", paddingRight:"4px"}}>
               <ListItemButton >
                  <ListItemIcon >{IconsArr[index]}</ListItemIcon>
-                <ListItemText primary={text.Title} sx={{width: '100px'}} />
+                <ListItemText primary={text.Title} sx={props.theme === 'dark' && {color: 'white',textDecoration: "none"}} />
               </ListItemButton>
             </Link>
           </ListItem>
@@ -101,6 +100,7 @@ function ResponsiveDrawer(props) {
           <Typography variant="h6" noWrap component="div">
             Crypto Portfolio
           </Typography>
+          <Button variant="contained" onClick={props.setTheme} sx={{marginLeft:"2em"}}>Theme</Button>
         </Toolbar>
       </AppBar>
       <Box
@@ -156,7 +156,7 @@ function ResponsiveDrawer(props) {
   );
 }
 
-ResponsiveDrawer.propTypes = {
+sidemenu.propTypes = {
   /**
    * Injected by the documentation to work in an iframe.
    * Remove this when copying and pasting into your project.
@@ -164,4 +164,4 @@ ResponsiveDrawer.propTypes = {
   window: PropTypes.func,
 };
 
-export default ResponsiveDrawer;
+export default sidemenu;

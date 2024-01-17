@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from 'next/image'
+import Image from "next/image";
 import axios from "axios";
 import {
   Button,
@@ -24,6 +24,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "../style.css";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
   const [binanceBalance, setBinanceBalance] = useState();
@@ -48,23 +49,28 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if(myCoins)
-    setFilteredCoins(myCoins);
-  },[myCoins])
+    if (myCoins) setFilteredCoins(myCoins);
+  }, [myCoins]);
 
   const callBinance = async () => {
     try {
-      const result = await axios.get("https://portfolio-server-tz9s.onrender.com/binance/assets");
+      const result = await axios.get(
+        "https://portfolio-server-tz9s.onrender.com/binance/assets"
+      );
       setBinanceBalance(result.data);
     } catch (e) {
+      toast("Error calling binance api");
       console.log(e);
     }
   };
   const callKu = async () => {
     try {
-      const result = await axios.get("https://portfolio-server-tz9s.onrender.com/ku/assets");
+      const result = await axios.get(
+        "https://portfolio-server-tz9s.onrender.com/ku/assets"
+      );
       setKuBalance(result.data);
     } catch (e) {
+      toast("Error calling ku coin api");
       console.log(e);
     }
   };
@@ -99,6 +105,7 @@ export default function Home() {
         }
         setBinanceBalance();
       } catch (e) {
+        toast("Error adding coin");
         console.log(e);
       }
     } else if (kuBalance && kuBalance.length > 0) {
@@ -127,7 +134,7 @@ export default function Home() {
         console.log(e);
       }
     } else {
-      alert("Call the api first");
+      toast("Call the api first");
     }
   };
 
@@ -143,6 +150,7 @@ export default function Home() {
       // setEditCoin({editCoin,lastDate: date})
       // console.log(date);
     } catch (e) {
+      toast("Error connecting DB");
       console.log(e);
     }
   };
@@ -151,15 +159,21 @@ export default function Home() {
     const avg = e.target.value;
 
     const invested = (editCoin.quantity * avg).toFixed(2);
-    setEditCoin({ ...editCoin, investedAmount: invested, avgBuyAmount: avg})
+    setEditCoin({ ...editCoin, investedAmount: invested, avgBuyAmount: avg });
   }
 
   const editCoinFn = async () => {
-    const val = await axios.post("https://portfolio-server-tz9s.onrender.com/edit/coin", {
-      ...editCoin,
-    });
+    const val = await axios.post(
+      "https://portfolio-server-tz9s.onrender.com/edit/coin",
+      {
+        ...editCoin,
+      }
+    );
     if (val.status >= 200 && val.status < 300) {
-      alert("Updated");
+      toast("Updated");
+    } else {
+      toast("Update failed");
+      return;
     }
     setEditCoin("");
     getCoins();
@@ -171,12 +185,14 @@ export default function Home() {
     setEditCoin({ ...editCoin, avgBuyAmount: avg, investedAmount: val });
   };
 
-  const searchFn = (e) => {    
+  const searchFn = (e) => {
     const searchTerm = e.target.value.toLowerCase();
-    const filter = myCoins.filter(coin => coin.name.toLowerCase().startsWith(searchTerm));
-  
+    const filter = myCoins.filter((coin) =>
+      coin.name.toLowerCase().startsWith(searchTerm)
+    );
+
     setFilteredCoins(filter);
-  }
+  };
 
   return (
     <Container maxWidth={"xl"} className="">
@@ -186,7 +202,20 @@ export default function Home() {
       <Button className="bg-green" onClick={callKu}>
         get Ku
       </Button>
-
+      <Toaster
+        toastOptions={{
+          success: {
+            style: {
+              background: "green",
+            },
+          },
+          error: {
+            style: {
+              background: "red",
+            },
+          },
+        }}
+      />
       {binanceBalance && (
         <Table sx={{ maxWidth: "400px" }} className="">
           <TableHead>
@@ -196,7 +225,7 @@ export default function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {binanceBalance.map((coin,index) => (
+            {binanceBalance.map((coin, index) => (
               <TableRow key={index} className="border-b">
                 <TableCell className="px-4 py-2">{coin.coin}</TableCell>
                 <TableCell className="px-4 py-2">{coin.free}</TableCell>
@@ -214,7 +243,7 @@ export default function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {kuBalance.map((coin,index) => (
+            {kuBalance.map((coin, index) => (
               <TableRow key={index} className="border-b">
                 <TableCell className="px-4 py-2">{coin.currency}</TableCell>
                 <TableCell className="px-4 py-2">{coin.balance}</TableCell>
@@ -227,17 +256,26 @@ export default function Home() {
         Add to Db
       </Button>
 
-      {myCoins && <TextField placeholder="search coin" label="Search"  margin="normal"
-                fullWidth onChange={searchFn} />}
       {myCoins && (
-        <TableContainer sx={{overflow: 'scroll'}} component={Paper}>
-          
+        <TextField
+          placeholder="search coin"
+          label="Search"
+          margin="normal"
+          fullWidth
+          onChange={searchFn}
+        />
+      )}
+      {myCoins && (
+        <TableContainer sx={{ overflow: "scroll" }} component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>#</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell><div className="mobile-hide">Avg Buy Amount</div><div className="pc-hide">Avg</div></TableCell>
+                <TableCell>
+                  <div className="mobile-hide">Avg Buy Amount</div>
+                  <div className="pc-hide">Avg</div>
+                </TableCell>
                 <TableCell>Quantity</TableCell>
                 <TableCell>Invested</TableCell>
                 <TableCell>Date</TableCell>
@@ -324,7 +362,7 @@ export default function Home() {
                 label="Avg"
                 type="number"
                 value={editCoin.avgBuyAmount}
-                onChange={editAvgFn }
+                onChange={editAvgFn}
                 disabled={false} // Assuming this field should be editable
                 margin="normal"
                 fullWidth
@@ -363,7 +401,7 @@ export default function Home() {
                 value={editCoin.status}
                 onChange={(e) =>
                   setEditCoin({ ...editCoin, status: e.target.value })
-                } 
+                }
                 margin="normal"
                 fullWidth
               >

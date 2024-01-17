@@ -362,7 +362,7 @@ export default function Home() {
                 label="Status"
                 value={editCoin.status}
                 onChange={(e) =>
-                  setEditCoin({ ...editCoin, investedAmount: e.target.value })
+                  setEditCoin({ ...editCoin, status: e.target.value })
                 } 
                 margin="normal"
                 fullWidth

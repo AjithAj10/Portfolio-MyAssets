@@ -59,7 +59,9 @@ export default function Home() {
       );
       setBinanceBalance(result.data);
     } catch (e) {
-      toast("Error calling binance api");
+      toast.error("Error calling binance api",{
+        position: 'top-right',
+      });
       console.log(e);
     }
   };
@@ -70,7 +72,9 @@ export default function Home() {
       );
       setKuBalance(result.data);
     } catch (e) {
-      toast("Error calling ku coin api");
+      toast.error("Error calling ku coin api",{
+        position: 'top-right',
+      });
       console.log(e);
     }
   };
@@ -105,7 +109,9 @@ export default function Home() {
         }
         setBinanceBalance();
       } catch (e) {
-        toast("Error adding coin");
+        toast.error("Error adding coin",{
+          position: 'top-right',
+        });
         console.log(e);
       }
     } else if (kuBalance && kuBalance.length > 0) {
@@ -134,7 +140,9 @@ export default function Home() {
         console.log(e);
       }
     } else {
-      toast("Call the api first");
+      toast.error("Call the api first",{
+        position: 'top-right',
+      });
     }
   };
 
@@ -150,7 +158,9 @@ export default function Home() {
       // setEditCoin({editCoin,lastDate: date})
       // console.log(date);
     } catch (e) {
-      toast("Error connecting DB");
+      toast.error("Error connecting DB",{
+        position: 'top-right',
+      });
       console.log(e);
     }
   };
@@ -170,9 +180,13 @@ export default function Home() {
       }
     );
     if (val.status >= 200 && val.status < 300) {
-      toast("Updated");
+      toast.success("Updated",{
+        position: 'top-right',
+      });
     } else {
-      toast("Update failed");
+      toast.error("Update failed",{
+        position: 'top-right',
+      });
       return;
     }
     setEditCoin("");

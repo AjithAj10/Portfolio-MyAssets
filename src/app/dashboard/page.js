@@ -307,7 +307,7 @@ export default function Home() {
                       <Image
                         className="coinImg"
                         width={25}
-                        height={26}
+                        height={25}
                         src={`https://assets.coincap.io/assets/icons/${coin.name.toLowerCase()}%402x.png`}
                         alt={coin.name}
                       />{" "}
